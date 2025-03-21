@@ -7,12 +7,12 @@
 
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 
 
 public class Program
 {
-
     static void Main(string[] args) {
       Console.WriteLine("Please enter the number of your inputs. e.g if you want to enter 1,2,5 (enter 3)\n");
       var noOfInputsString = Console.ReadLine();
@@ -44,7 +44,7 @@ public class Program
           Console.ForegroundColor = ConsoleColor.DarkRed;
           Console.WriteLine($"Your input is invalid, please try again\n");
           Console.ResetColor();
-          //Main(args);
+          Main(args);
         }
 
         numbers[i] = num;
@@ -52,8 +52,11 @@ public class Program
 
       PrintSum(numbers);
       PrintMean(numbers);
+      PrintMin(numbers);
+      PrintMax(numbers);
       PrintMedian(numbers);
-      //PrintMode(numbers);
+      PrintMode(numbers);
+    
       //Main(args);
 
     }
@@ -83,9 +86,21 @@ public class Program
       
     }
     static void PrintMedian(int[] numbers) // 1,2,3,4,5,6,7,8,9,10
-     {   // sort numbers first
-        Array.Sort(numbers); 
-        // odd case
+    {   // sort numbers first
+      // Implementing a manual sorting algorithm (Bubble Sort)
+      for (int i = 0; i < numbers.Length - 1; i++)
+      {
+          for (int j = 0; j < numbers.Length - i - 1; j++)
+          {
+          if (numbers[j] > numbers[j + 1])
+          {
+          // Swap numbers[j] and numbers[j + 1]
+          int temp = numbers[j];
+          numbers[j] = numbers[j + 1];
+          numbers[j + 1] = temp;
+          }
+          }
+      }  // odd case
         if (numbers.Length  % 2 == 1) {
           int Position = (numbers.Length/ 2 );
           Console.WriteLine($"The median is {numbers[Position]}");
@@ -96,23 +111,74 @@ public class Program
           double Result = (numbers[Position1] + numbers[Position2])/ 2D; 
           Console.WriteLine($"The median is {Result}");
         }
-     }
-
-         //1 mode
-          //  var count = 0;
-          //  for(int i = 0; i < numbers.Length; i++) {
-          //   if (numbers[i]==numbers[i++])
-          //   {
-          //     count= count+1;
-          //           Console.WriteLine($" the mode is  {i}  and it occured  {count} times");
-
-          //   } 
+    }
+    static void PrintMin(int[] numbers) // 1,2,3,4,5,6,7,8,9,10
+    { 
+       var  smallest = numbers[0];
     
+        for (int i =1; i < numbers.Length; i++)
+          {
+           var current = numbers[i];
+          if (smallest > current)
+          {
+            smallest = current ;
+              }
         
-        // 1 mode
-         // bimodal
-}
+          }
+            Console.WriteLine($"The minimum number is {smallest}");
+          
+    }
+    static void PrintMax(int[] numbers) //17,8,199,10
+    { 
+       var Biggest = numbers[0];
+    
+        for (int i =1; i < numbers.Length; i++)
+          {
+           var current = numbers[i];
+          if (Biggest < current)// 17 < 8
+          {
+            Biggest = current ;
+          }
+          }
+            Console.WriteLine($"The maximum number is {Biggest}");
+          
+    }
+    static void PrintMode(int[] numbers) //17,8,199,10
+    {
+      var numberCountDict = new Dictionary<int, int>();
 
+      // Count occurrences of each number
+      foreach (var num in numbers)
+      {
+        if (!numberCountDict.ContainsKey(num)) 
+        {
+          numberCountDict[num] = 1;
+        }
+        else
+        {
+          numberCountDict[num]++;
+        }
+      }
+
+      // Find the number with the highest count
+      int mode = numbers[0];
+      int maxCount = 0;
+
+      foreach (var pair in numberCountDict)
+      {
+        if (pair.Value > maxCount)
+        {
+          maxCount = pair.Value;
+          mode = pair.Key;
+
+        }
+      }
+
+      Console.WriteLine($"The mode is {mode} and it occurred {maxCount} times.");
+    }
+         
+    }
+     
   
   
    // private static void Main(string[] args)
